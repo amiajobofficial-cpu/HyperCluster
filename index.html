@@ -27,36 +27,67 @@
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             perspective: 2000px;
-            -webkit-perspective: 2000px;
         }
 
         .neon-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -3;
-            filter: blur(180px); 
+            filter: blur(150px); 
         }
-        .blob { position: absolute; border-radius: 50%; opacity: 0.5; } 
+        .blob { position: absolute; border-radius: 50%; opacity: 0.4; animation: drift 15s infinite alternate ease-in-out; } 
+        .blob1 { width: 60vw; height: 60vw; background: var(--main-blue); top: -10%; left: -10%; }
+        .blob2 { width: 70vw; height: 70vw; background: var(--main-green); bottom: -15%; right: -10%; }
         
-        .blob1 { width: 60vw; height: 60vw; background: var(--main-blue); top: -15vh; left: -15vw; }
-        .blob2 { width: 70vw; height: 70vw; background: var(--main-green); bottom: -20vh; right: -20vw; }
+        @keyframes drift {
+            from { transform: translate(0,0) scale(1); }
+            to { transform: translate(40px, 60px) scale(1.1); }
+        }
 
-        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
 
-        .card-container {
+        .neon-card-wrapper {
             width: 90%;
             max-width: 380px;
-            height: 550px;
+            height: 570px;
             position: relative;
-            z-index: 5;
-            transform-style: preserve-3d;
-            -webkit-transform-style: preserve-3d;
-            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 3px; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
-        .card-container.is-flipped { 
-            transform: rotateY(180deg); 
-            -webkit-transform: rotateY(180deg);
+        .neon-card-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 180%;
+            height: 180%;
+            background: conic-gradient(from 0deg, transparent, var(--main-blue), transparent, var(--main-green), transparent);
+            animation: rotateRGB 3s linear infinite;
+        }
+
+        @keyframes rotateRGB {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .card-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 37px;
+            background: #08080a;
+            z-index: 2;
+        }
+
+        .neon-card-wrapper.is-flipped .card-container { 
+            transform: rotateY(180deg) scale(1.02); 
         }
 
         .card-face {
@@ -64,104 +95,114 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            border-radius: 40px;
+            border-radius: 37px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            
-            /* Liquid Glass Effect */
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-front { 
-            padding: 40px 20px; 
-            text-align: center; 
-            z-index: 2;
-            transform: translateZ(1px); /* PC ফিক্স: সামনের অংশকে ১ পিক্সেল সামনে আনা */
-        }
-        
-        .card-back { 
-            transform: rotateY(180deg) translateZ(1px); /* PC ফিক্স: পেছনের অংশকে সঠিকভাবে লেয়ারিং করা */
-            -webkit-transform: rotateY(180deg) translateZ(1px);
             padding: 40px 25px; 
-            z-index: 1;
-            visibility: hidden; /* শুরুতে হাইড রাখা */
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            overflow: hidden;
         }
 
-        /* যখন কার্ড উল্টাবে তখন ব্যাক সাইড দেখাবে */
-        .card-container.is-flipped .card-back {
+        .card-face::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -150%;
+            width: 45%;
+            height: 300%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.01) 10%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.01) 90%, transparent);
+            transform: rotate(35deg);
+            animation: shineBeam 5.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes shineBeam {
+            0% { left: -150%; }
+            25% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .card-back { 
+            transform: rotateY(180deg);
+            visibility: hidden;
+            text-align: left; 
+        }
+
+        .neon-card-wrapper.is-flipped .card-back {
             visibility: visible;
         }
 
-        .title { font-family: 'Orbitron'; font-size: 1.8rem; color: var(--main-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
-        .sahirul-name { font-family: 'Orbitron'; font-size: 1.6rem; color: #fff; margin: 10px 0 30px; letter-spacing: 3px; }
+        .title { font-family: 'Orbitron'; font-size: 1.6rem; color: var(--main-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.4); margin-bottom: 5px; }
+        .sahirul-name { font-family: 'Orbitron'; font-size: 1.8rem; color: #fff; margin-bottom: 30px; letter-spacing: 4px; }
 
         .widget-item {
-            background: rgba(255, 255, 255, 0.05);
-            margin: 12px 0; padding: 15px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 12px 0; padding: 18px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex; align-items: center;
-            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .widget-item:hover { background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.2); }
-        .widget-item:active { transform: scale(0.96); }
-
-        .icon-art { 
-            width: 26px; height: 26px; margin-right: 12px; 
-            fill: var(--main-green); 
-            filter: drop-shadow(0 0 8px var(--main-green)); 
+        .widget-item:hover { 
+            background: rgba(0, 255, 136, 0.08); 
+            border-color: var(--main-green); 
+            transform: translateX(8px); 
         }
-        .icon-art.stroke-only { fill: none; stroke: var(--main-green); stroke-width: 2; }
 
-        #typing { font-style: italic; font-size: 0.8rem; margin: 20px 0; min-height: 40px; color: #eee; text-align: left; }
-        
-        .info-content { display: none; opacity: 0; }
-        .info-content.active { display: block; animation: fadeIn 0.5s forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .icon-art { width: 26px; height: 26px; margin-right: 15px; fill: var(--main-green); filter: drop-shadow(0 0 5px var(--main-green)); }
 
-        .back-title { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--main-green); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .back-text p { font-size: 0.85rem; margin-bottom: 15px; line-height: 1.8; color: #fff; }
-        
-        .glow-bullet { color: var(--main-green); text-shadow: 0 0 10px var(--main-green); font-weight: bold; margin-right: 8px; }
-        .blue { color: var(--main-blue); font-weight: bold; }
+        #typing { font-style: italic; font-size: 0.85rem; margin: 25px 0; min-height: 45px; color: #ccc; line-height: 1.5; text-align: center; display: flex; align-items: center; justify-content: center; }
+        .cursor { display: inline-block; width: 7px; height: 1.1rem; background-color: var(--main-green); margin-left: 5px; animation: blink 0.8s infinite; box-shadow: 0 0 8px var(--main-green); border-radius: 2px; }
+        @keyframes blink { 50% { opacity: 0; } }
 
+        .info-content { display: none; height: 100%; }
+        .info-content.active { display: flex; flex-direction: column; animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .back-title { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--main-green); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
+        .back-text p { font-size: 0.95rem; margin-bottom: 22px; line-height: 1.7; color: #fff; display: flex; align-items: center; white-space: nowrap; }
+        .glow-bullet { color: var(--main-green); text-shadow: 0 0 8px var(--main-green); margin-right: 12px; font-weight: bold; }
+        .blue { color: var(--main-blue); font-weight: bold; margin: 0 5px; }
+
+        /* Fixed Back Button Styling */
         .back-btn {
             margin-top: auto;
             background: var(--main-green);
             color: #000;
             border: none;
-            padding: 14px;
-            border-radius: 30px;
+            padding: 16px;
+            border-radius: 18px;
             font-family: 'Orbitron';
             font-weight: 900;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%;
+            z-index: 10;
         }
-        .back-btn:hover { box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4); transform: translateY(-2px); }
+        .back-btn:hover { box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4); transform: translateY(-3px); }
 
         .instagram-link {
-            margin-top: 20px;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
-            padding: 16px; border-radius: 25px;
-            color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 0.8rem;
-            display: inline-block;
-            font-weight: bold;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(220, 39, 67, 0.5), 0 0 30px rgba(188, 24, 136, 0.3);
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 18px; border-radius: 25px;
+            color: #fff; text-decoration: none; 
+            font-family: 'Orbitron'; font-size: 0.8rem;
+            display: inline-block; font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.4s ease;
+            width: 100%;
+            text-align: center;
         }
-        .instagram-link:hover {
-            box-shadow: 0 0 25px rgba(220, 39, 67, 0.8), 0 0 50px rgba(188, 24, 136, 0.6);
-            transform: translateY(-2px);
+        .instagram-link:hover { 
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            border-color: transparent;
+            transform: scale(1.02);
+            box-shadow: 0 15px 25px rgba(220, 39, 67, 0.4);
         }
-        .instagram-link:active { transform: scale(0.92) translateY(0); }
     </style>
 </head>
 <body>
@@ -172,97 +213,125 @@
     </div>
     <canvas id="snow-canvas-back"></canvas>
 
-    <div class="card-container" id="card">
-        
-        <div class="card-face card-front" id="front-face">
-            <h1 class="title">Hyper Cluster</h1>
-            <h2 class="sahirul-name">SAHIRUL</h2>
-
-            <div class="widget-item" id="btn-islam">
-                <svg class="icon-art" viewBox="0 0 24 24">
-                    <path d="M12.5,2C11.39,2 10.31,2.15 9.28,2.44C12.61,3.43 15,6.47 15,10C15,13.53 12.61,16.57 9.28,17.56C10.31,17.85 11.39,18 12.5,18C16.92,18 20.5,14.42 20.5,10C20.5,5.58 16.92,2 12.5,2M10.25,5.5L11,8.1L13.7,8.1L11.5,9.7L12.3,12.3L10.25,10.7L8.2,12.3L9,9.7L6.8,8.1L9.5,8.1L10.25,5.5Z" />
-                </svg>
-                <span>Islamic Identity</span>
-            </div>
-
-            <div class="widget-item" id="btn-tech">
-                <svg class="icon-art stroke-only" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9V9z"/></svg>
-                <span>Tech Expertise</span>
-            </div>
-
-            <div id="typing">
-                <span id="typing-text"></span>
-            </div>
+    <div class="neon-card-wrapper" id="neon-wrap">
+        <div class="card-container" id="card-inner">
             
-            <a href="https://www.instagram.com/egobre4ker" target="_blank" class="instagram-link">INSTAGRAM: @egobre4ker</a>
-        </div>
+            <div class="card-face card-front" id="front-face">
+                <h1 class="title">Hyper Cluster</h1>
+                <h2 class="sahirul-name">SAHIRUL</h2>
 
-        <div class="card-face card-back" id="back-face">
-            <div id="islam-info" class="info-content">
-                <h3 class="back-title">Islamic Identity</h3>
-                <div class="back-text">
-                    <p><span class="glow-bullet">•</span> Sahirul is a devoted <span class="blue">Servant of Allah</span>.</p>
-                    <p><span class="glow-bullet">•</span> Trying to follow the path of the <span class="blue">Sunnah</span> deeply.</p>
-                    <p><span class="glow-bullet">•</span> Seeking <span class="blue">Eternal Success</span> over worldly drops.</p>
-                    <p><span class="glow-bullet">•</span> Committed to <span class="blue">Haqq</span> and values.</p>
+                <div class="widget-item" id="btn-islam">
+                    <svg class="icon-art" viewBox="0 0 24 24"><path d="M12.5,2C11.39,2 10.31,2.15 9.28,2.44C12.61,3.43 15,6.47 15,10C15,13.53 12.61,16.57 9.28,17.56C10.31,17.85 11.39,18 12.5,18C16.92,18 20.5,14.42 20.5,10C20.5,5.58 16.92,2 12.5,2Z"/></svg>
+                    <span>Islamic Identity</span>
                 </div>
+
+                <div class="widget-item" id="btn-tech">
+                    <svg class="icon-art" viewBox="0 0 24 24"><path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z"/></svg>
+                    <span>Tech Expertise</span>
+                </div>
+
+                <div id="typing">
+                    <span id="typing-text"></span><span class="cursor"></span>
+                </div>
+                
+                <a href="https://www.instagram.com/egobre4ker" target="_blank" class="instagram-link">INSTAGRAM: @egobre4ker</a>
             </div>
 
-            <div id="tech-info" class="info-content">
-                <h3 class="back-title">Tech Expertise</h3>
-                <div class="back-text">
-                    <p><span class="glow-bullet">•</span> <span class="blue">IC Expert</span> & Mobile Repair Master.</p>
-                    <p><span class="glow-bullet">•</span> Pro <span class="blue">Python Developer</span> & Logic Creator.</p>
-                    <p><span class="glow-bullet">•</span> Specialist in <span class="blue">Micro-Hardware</span> Engineering.</p>
-                    <p><span class="glow-bullet">•</span> Precision Architect of <span class="blue">Modern Circuits</span>.</p>
+            <div class="card-face card-back" id="back-face">
+                <div id="islam-info" class="info-content">
+                    <h3 class="back-title">Islamic Identity</h3>
+                    <div class="back-text">
+                        <p><span class="glow-bullet">▹</span> Servant of <span class="blue">Allah</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Following the <span class="blue">Sunnah</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Seeking <span class="blue">Eternal Success</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Committed to <span class="blue">Haqq</span>.</p>
+                    </div>
+                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
+                </div>
+
+                <div id="tech-info" class="info-content">
+                    <h3 class="back-title">Tech Expertise</h3>
+                    <div class="back-text">
+                        <p><span class="glow-bullet">▹</span> <span class="blue">IC Expert</span> & Mobile Repair.</p>
+                        <p><span class="glow-bullet">▹</span> Pro <span class="blue">Python Developer</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Specialist in <span class="blue">Micro-Hardware</span>.</p>
+                        <p><span class="glow-bullet">▹</span> <span class="blue">Circuit Logic</span> Architect.</p>
+                    </div>
+                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
                 </div>
             </div>
-
-            <button class="back-btn" id="btn-back">GO BACK</button>
         </div>
     </div>
 
     <script>
-        const bioText = "“Also Work for the Eternal, not just for a Single Drop of the Ocean\"";
-        let bioIdx = 0;
-        function typeBio() {
-            if (bioIdx < bioText.length) {
-                document.getElementById('typing-text').innerHTML += bioText.charAt(bioIdx);
-                bioIdx++;
-                setTimeout(typeBio, 60);
-            }
-        }
-        window.onload = typeBio;
+        const phrases = [
+            "“Also Work for the Eternal, not just for a Single Drop of the Ocean\"",
+            "Innovating with Passion...",
+            "Code is Poetry in Motion.",
+            "Stay Focused, Stay Humble."
+        ];
+        
+        let phraseIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+        let typingDelay = 100;
 
-        const card = document.getElementById('card');
+        function type() {
+            const currentPhrase = phrases[phraseIdx];
+            const typingText = document.getElementById('typing-text');
+            
+            if (isDeleting) {
+                typingText.textContent = currentPhrase.substring(0, charIdx - 1);
+                charIdx--;
+                typingDelay = 40; // Faster deletion
+            } else {
+                typingText.textContent = currentPhrase.substring(0, charIdx + 1);
+                charIdx++;
+                typingDelay = 80; // Smooth typing
+            }
+
+            if (!isDeleting && charIdx === currentPhrase.length) {
+                isDeleting = true;
+                typingDelay = 2500; // Pause at end
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                phraseIdx = (phraseIdx + 1) % phrases.length;
+                typingDelay = 500;
+            }
+
+            setTimeout(type, typingDelay);
+        }
+        window.onload = type;
+
+        const neonWrap = document.getElementById('neon-wrap');
         const frontFace = document.getElementById('front-face');
-        const backFace = document.getElementById('back-face');
         const islamSection = document.getElementById('islam-info');
         const techSection = document.getElementById('tech-info');
 
         document.getElementById('btn-islam').onclick = () => {
             islamSection.classList.add('active');
             techSection.classList.remove('active');
-            card.classList.add('is-flipped');
-            // পিসি ফিক্স: উল্টানোর সময় সামনের অংশ ইনভিজিবল করে দেওয়া
-            setTimeout(() => { if(card.classList.contains('is-flipped')) frontFace.style.visibility = 'hidden'; }, 450);
+            neonWrap.classList.add('is-flipped');
+            setTimeout(() => { if(neonWrap.classList.contains('is-flipped')) frontFace.style.visibility = 'hidden'; }, 400);
         };
 
         document.getElementById('btn-tech').onclick = () => {
             techSection.classList.add('active');
             islamSection.classList.remove('active');
-            card.classList.add('is-flipped');
-            setTimeout(() => { if(card.classList.contains('is-flipped')) frontFace.style.visibility = 'hidden'; }, 450);
+            neonWrap.classList.add('is-flipped');
+            setTimeout(() => { if(neonWrap.classList.contains('is-flipped')) frontFace.style.visibility = 'hidden'; }, 400);
         };
 
-        document.getElementById('btn-back').onclick = () => {
+        function goBack() {
             frontFace.style.visibility = 'visible';
-            card.classList.remove('is-flipped');
-        };
+            neonWrap.classList.remove('is-flipped');
+        }
 
+        // Particle Interaction Logic
         const canvas = document.getElementById('snow-canvas-back');
         const ctx = canvas.getContext('2d');
         let w, h, particles = [];
+        let mouseX = 0, mouseY = 0;
 
         function resizeCanvas() {
             w = canvas.width = window.innerWidth;
@@ -271,22 +340,39 @@
         window.onresize = resizeCanvas;
         resizeCanvas();
 
-        for(let i=0; i<100; i++) {
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        for(let i=0; i<70; i++) {
             particles.push({
                 x: Math.random() * w,
                 y: Math.random() * h,
-                size: Math.random() * 2 + 1,
-                speed: Math.random() * 0.8 + 0.4
+                size: Math.random() * 1.5 + 0.5,
+                speed: Math.random() * 0.4 + 0.2,
+                vx: 0,
+                vy: 0
             });
         }
 
         function draw() {
             ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
             particles.forEach(p => {
+                // Gentle Mouse Reaction
+                let dx = mouseX - p.x;
+                let dy = mouseY - p.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 100) {
+                    p.x -= dx * 0.01;
+                    p.y -= dy * 0.01;
+                }
+
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
                 ctx.fill();
+                
                 p.y += p.speed;
                 if(p.y > h) p.y = -10;
             });
