@@ -28,31 +28,25 @@
             perspective: 2000px;
         }
 
-        /* --- Cyber Matrix Background --- */
-        #cyber-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -4; opacity: 0.15;
-        }
-
-        .neon-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; filter: blur(120px); }
-        .blob { position: absolute; border-radius: 50%; opacity: 0.3; animation: drift 15s infinite alternate ease-in-out; } 
+        /* --- Backgrounds --- */
+        #cyber-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5; opacity: 0.3; pointer-events: none; }
+        .neon-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -4; filter: blur(120px); pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; opacity: 0.35; animation: drift 15s infinite alternate ease-in-out; } 
         .blob1 { width: 60vw; height: 60vw; background: var(--main-blue); top: -10%; left: -10%; }
         .blob2 { width: 70vw; height: 70vw; background: var(--main-green); bottom: -15%; right: -10%; }
         @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px, 60px); } }
+        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -3; opacity: 0.2; }
 
-        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -2; opacity: 0.2; }
-
-        /* --- Main Card Wrapper --- */
+        /* --- Card Wrapper --- */
         .neon-card-wrapper {
             width: 90%; max-width: 380px; height: 570px;
             position: relative; border-radius: 40px; padding: 3px; 
             overflow: hidden; display: flex; justify-content: center; align-items: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             animation: floatingCard 6s infinite ease-in-out;
-            transition: filter 0.5s ease, transform 0.5s ease;
+            transition: filter 0.5s ease;
             z-index: 5;
         }
-
         .neon-card-wrapper.blur-active { filter: blur(12px); transform: scale(0.95); }
 
         @keyframes floatingCard {
@@ -67,41 +61,34 @@
         }
         @keyframes rotateRGB { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- FIX: STABLE FLIP FOR PC --- */
         .card-container {
-            width: 100%; height: 100%; position: relative; 
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             border-radius: 37px; background: #08080a; z-index: 2;
         }
         .neon-card-wrapper.is-flipped .card-container { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; 
-            -webkit-backface-visibility: hidden; /* For Safari/Chrome PC */
-            border-radius: 37px;
-            display: flex; flex-direction: column; padding: 40px 25px; 
-            background: #08080a;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            border-radius: 37px; display: flex; flex-direction: column; padding: 40px 25px; 
+            background: #08080a; border: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center; overflow: hidden; align-items: center; 
+            transition: opacity 0.3s;
         }
 
         .card-face::after {
             content: ''; position: absolute; top: 0; left: -250%; width: 150%; height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 60%, transparent);
-            animation: shineBeam 5s infinite linear; pointer-events: none; z-index: 1; 
+            animation: shineBeam 5s infinite linear; pointer-events: none; z-index: 10;
         }
-        @keyframes shineBeam { 0% { left: -250%; } 30% { left: 250%; } 100% { left: 250%; } }
 
-        /* --- Back Face Hidden Fix --- */
-        .card-back { 
-            transform: rotateY(180deg); 
-            display: none; /* Initially Hidden to avoid PC flicker */
-            text-align: left; align-items: flex-start !important; 
-        }
-        .neon-card-wrapper.is-flipped .card-back { display: flex; }
-        .neon-card-wrapper.is-flipped .card-front { display: none; } /* Hide front immediately when flipped */
+        /* --- Visibility Logic to stop ghost clicks --- */
+        .card-front { z-index: 2; opacity: 1; pointer-events: auto; }
+        .card-back { transform: rotateY(180deg); z-index: 1; opacity: 0; pointer-events: none; text-align: left; align-items: flex-start !important; }
+
+        .neon-card-wrapper.is-flipped .card-front { opacity: 0; pointer-events: none; }
+        .neon-card-wrapper.is-flipped .card-back { opacity: 1; pointer-events: auto; visibility: visible; }
 
         .title { font-family: 'Orbitron'; font-size: 1.6rem; color: var(--main-blue); text-shadow: 0 0 10px var(--m-blue-alpha); margin-bottom: 5px; }
         .sahirul-name { font-family: 'Orbitron'; font-size: 1.8rem; color: #fff; margin-bottom: 30px; letter-spacing: 4px; }
@@ -109,8 +96,8 @@
         .widget-item {
             background: rgba(255, 255, 255, 0.06); margin: 12px 0; padding: 18px;
             border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex; align-items: center; cursor: pointer; width: 100%;
-            transition: 0.4s; position: relative; z-index: 10;
+            display: flex; align-items: center; cursor: pointer; width: 100%; transition: 0.4s;
+            position: relative; z-index: 20;
         }
         .widget-item:hover { background: rgba(0, 255, 136, 0.08); border-color: var(--main-green); transform: translateX(10px); }
         .icon-art { width: 26px; height: 26px; margin-right: 15px; fill: var(--main-green); filter: drop-shadow(0 0 8px var(--main-green)); }
@@ -122,22 +109,22 @@
             margin-top: 15px; background: var(--insta-grad); padding: 18px; border-radius: 25px;
             color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 0.8rem;
             display: inline-block; width: 100%; text-align: center; font-weight: bold;
-            border: 1px solid rgba(255, 255, 255, 0.2); transition: 0.4s;
-            box-shadow: 0 5px 15px rgba(220, 39, 67, 0.4); position: relative; z-index: 10;
+            box-shadow: 0 5px 15px rgba(220, 39, 67, 0.3); transition: 0.4s;
+            position: relative; z-index: 20;
         }
-        .instagram-link:active, .instagram-link:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 35px rgba(220, 39, 67, 0.8); }
+        .instagram-link:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 35px rgba(220, 39, 67, 0.8); }
 
-        /* Popup Styles */
+        /* --- Popup --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.2); z-index: 9998;
+            background: rgba(0, 0, 0, 0.2); z-index: 999;
             opacity: 0; visibility: hidden; transition: 0.5s ease;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
 
         .modal {
             position: fixed; top: 50%; left: 50%; width: 85%; max-width: 320px;
-            z-index: 9999; border-radius: 35px; overflow: hidden;
+            z-index: 1000; border-radius: 35px; overflow: hidden;
             opacity: 0; visibility: hidden;
             transform: translate(-50%, -45%) scale(0.8) rotateX(-20deg);
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -146,37 +133,28 @@
         }
         .modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1) rotateX(0deg); }
 
-        .modal::after {
-            content: ''; position: absolute; top: 0; left: -250%; 
-            width: 40%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15) 50%, transparent);
-            animation: popupShine 4s infinite linear;
-            pointer-events: none; z-index: 10001;
-        }
-        @keyframes popupShine { 0% { left: -250%; } 35% { left: 250%; } 100% { left: 250%; } }
-
         .modal-inner-content {
             background: rgba(255, 255, 255, 0.02);
             padding: 40px 25px; border-radius: 35px; 
             backdrop-filter: blur(15px) saturate(120%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: 10000;
         }
 
         .modal-title { font-family: 'Orbitron'; color: var(--main-blue); margin-bottom: 15px; font-size: 1.2rem; text-shadow: 0 0 10px var(--m-blue-alpha); }
-        .modal-body { font-size: 1rem; color: #fff; line-height: 1.6; font-weight: 700; font-style: italic; text-align: center; margin-bottom: 25px; }
+        .modal-body { font-size: 1rem; color: #fff; line-height: 1.6; font-weight: 700; font-style: italic; text-align: center; margin-bottom: 25px; text-shadow: 0 2px 8px rgba(0,0,0,1); }
         .close-modal { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 10px 25px; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
-        .info-content { display: none; width: 100%; height: 100%; }
-        .info-content.active { display: flex; flex-direction: column; }
+        /* --- Back Content --- */
+        .info-content { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .info-content.active { display: flex; animation: slideIn 0.5s ease forwards; }
         .back-title { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--main-green); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .back-text p { font-size: 0.95rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; white-space: nowrap; }
         .glow-bullet { color: var(--main-green); margin-right: 12px; font-weight: bold; text-shadow: 0 0 10px var(--main-green); }
         .blue { color: var(--main-blue); font-weight: bold; margin: 0 5px; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(0, 210, 255, 0.4); }
-        .back-btn { margin-top: auto; background: var(--main-green); color: #000; border: none; padding: 16px; border-radius: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; width: 100%; position: relative; z-index: 15; }
+        .back-btn { margin-top: auto; background: var(--main-green); color: #000; border: none; padding: 16px; border-radius: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; width: 100%; }
 
-        .click-p { position: fixed; pointer-events: none; border-radius: 50%; z-index: 10002; }
+        .click-p { position: fixed; pointer-events: none; border-radius: 50%; z-index: 99999; }
     </style>
 </head>
 <body>
@@ -215,12 +193,12 @@
                 <div id="islam-info" class="info-content">
                     <h3 class="back-title">Islamic Identity</h3>
                     <div class="back-text">
-                        <p><span class="glow-bullet">▹</span> Servant of <span class="blue" onclick="showPopup('Allah', 'The One and Only God, the Creator.')">Allah</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Servant of <span class="blue" onclick="showPopup('Allah (SWT)', 'The One and Only God, the Creator.')">Allah (SWT)</span>.</p>
                         <p><span class="glow-bullet">▹</span> Following the <span class="blue" onclick="showPopup('Sunnah', 'Practices of Prophet Muhammad (PBUH).')">Sunnah</span>.</p>
                         <p><span class="glow-bullet">▹</span> Seeking <span class="blue" onclick="showPopup('Success', 'True victory: Pleasure of Allah and Jannah.')">Eternal Success</span>.</p>
                         <p><span class="glow-bullet">▹</span> Committed to <span class="blue" onclick="showPopup('Haqq', 'Standing firm for the Truth.')">Haqq</span>.</p>
                     </div>
-                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
+                    <button class="back-btn" id="return-btn">RETURN TO PROFILE</button>
                 </div>
                 <div id="tech-info" class="info-content">
                     <h3 class="back-title">Tech Expertise</h3>
@@ -230,107 +208,59 @@
                         <p><span class="glow-bullet">▹</span> Specialist in <span class="blue" onclick="showPopup('Hardware', 'Diagnostic of micro-soldering and motherboards.')">Micro-Hardware</span>.</p>
                         <p><span class="glow-bullet">▹</span> <span class="blue" onclick="showPopup('Logic', 'Logic architecture to solve PCB faults.')">Circuit Logic</span> Architect.</p>
                     </div>
-                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
+                    <button class="back-btn" id="return-btn-tech">RETURN TO PROFILE</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- Matrix Animation ---
-        const cyberCanvas = document.getElementById('cyber-canvas');
-        const cctx = cyberCanvas.getContext('2d');
-        let cw, ch;
-        function resizeMatrix() { cw = cyberCanvas.width = window.innerWidth; ch = cyberCanvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeMatrix); resizeMatrix();
-        const chars = "0101ABCD";
-        const fontSize = 14;
-        const columns = cw / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
-        function drawMatrix() {
-            cctx.fillStyle = "rgba(1, 1, 3, 0.1)"; cctx.fillRect(0, 0, cw, ch);
-            cctx.fillStyle = "#00ff88"; cctx.font = fontSize + "px Orbitron";
-            for(let i=0; i<drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                cctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if(drops[i] * fontSize > ch && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 50);
+        // Matrix & Snow (Optimized)
+        const cyberCanvas = document.getElementById('cyber-canvas'), cctx = cyberCanvas.getContext('2d');
+        let cw, ch; function resM() { cw = cyberCanvas.width = window.innerWidth; ch = cyberCanvas.height = window.innerHeight; }
+        window.onresize = resM; resM();
+        const mChars = "0101ABCD", fSize = 16, drops = Array(Math.floor(cw/fSize)).fill(1);
+        function drawM() { cctx.fillStyle = "rgba(1, 1, 3, 0.15)"; cctx.fillRect(0,0,cw,ch); cctx.fillStyle = "#00ff88"; cctx.font = fSize + "px Orbitron"; drops.forEach((y, i) => { const txt = mChars[Math.floor(Math.random()*mChars.length)]; cctx.fillText(txt, i*fSize, y*fSize); if(y*fSize > ch && Math.random() > 0.975) drops[i] = 0; drops[i]++; }); }
+        setInterval(drawM, 50);
 
-        // Typing Effect
         const phrases = ["“Also Work for the Eternal, not just for a Single Drop of the Ocean\"", "Innovating with Passion...", "Code is Poetry in Motion.", "Stay Focused, Stay Humble."];
-        let phraseIdx = 0, charIdx = 0, isDeleting = false;
-        function type() {
-            const current = phrases[phraseIdx];
-            const el = document.getElementById('typing-text');
-            if (isDeleting) { el.textContent = current.substring(0, charIdx - 1); charIdx--; } 
-            else { el.textContent = current.substring(0, charIdx + 1); charIdx++; }
-            let speed = isDeleting ? 40 : 80;
-            if (!isDeleting && charIdx === current.length) { isDeleting = true; speed = 2500; } 
-            else if (isDeleting && charIdx === 0) { isDeleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; speed = 500; }
-            setTimeout(type, speed);
-        }
+        let pIdx = 0, cIdx = 0, isDel = false;
+        function type() { const cur = phrases[pIdx]; const el = document.getElementById('typing-text'); el.textContent = cur.substring(0, cIdx + (isDel ? -1 : 1)); cIdx += isDel ? -1 : 1; let speed = isDel ? 40 : 80; if(!isDel && cIdx === cur.length) { isDel = true; speed = 2500; } else if(isDel && cIdx === 0) { isDel = false; pIdx = (pIdx+1)%phrases.length; speed = 500; } setTimeout(type, speed); }
         window.onload = type;
 
         // Click Particles
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.close-modal') || e.target.closest('.blue') || e.target.closest('.widget-item') || e.target.closest('.back-btn')) {
-                for(let i=0; i<8; i++) {
-                    const p = document.createElement('div');
-                    p.className = 'click-p';
-                    p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
-                    p.style.width = '3px'; p.style.height = '3px';
-                    p.style.background = Math.random() > 0.5 ? 'var(--main-green)' : 'var(--main-blue)';
-                    document.body.appendChild(p);
-                    const dx = (Math.random() - 0.5) * 120, dy = (Math.random() - 0.5) * 120;
-                    p.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }], { duration: 700 }).onfinish = () => p.remove();
-                }
-            }
-        });
+        document.addEventListener('mousedown', (e) => { for(let i=0; i<15; i++) { const p = document.createElement('div'); p.className = 'click-p'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; p.style.width = Math.random() * 5 + 2 + 'px'; p.style.height = p.style.width; const color = Math.random() > 0.5 ? 'var(--main-blue)' : 'var(--main-green)'; p.style.background = color; p.style.boxShadow = `0 0 12px ${color}`; document.body.appendChild(p); const dx = (Math.random() - 0.5) * 150, dy = (Math.random() - 0.5) * 150; p.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }], { duration: Math.random() * 500 + 500, easing: 'cubic-bezier(0, .9, .57, 1)' }).onfinish = () => p.remove(); } });
 
-        const modal = document.getElementById('detailModal'), overlay = document.getElementById('overlay'), cardWrap = document.getElementById('neon-wrap');
-        function showPopup(t, b) { 
-            document.getElementById('mTitle').textContent = t.toUpperCase(); 
-            document.getElementById('mBody').textContent = b; 
-            modal.classList.add('active'); overlay.classList.add('active'); 
-            cardWrap.classList.add('blur-active'); 
-        }
-        function closeAll() { modal.classList.remove('active'); overlay.classList.remove('active'); cardWrap.classList.remove('blur-active'); }
-        document.getElementById('closeM').onclick = closeAll; overlay.onclick = closeAll;
-
-        const neonWrap = document.getElementById('neon-wrap'), frontFace = document.getElementById('front-face'), backFace = document.getElementById('back-face'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
+        // Navigation (Physical Layer Logic)
+        const neonWrap = document.getElementById('neon-wrap'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
         
-        // --- FIX: IMMEDIATE HIDE LOGIC FOR PC ---
-        document.getElementById('btn-islam').addEventListener('click', function() {
+        document.getElementById('btn-islam').onclick = () => {
             islam.classList.add('active'); tech.classList.remove('active');
             neonWrap.classList.add('is-flipped');
-            setTimeout(() => { frontFace.style.display = 'none'; backFace.style.display = 'flex'; }, 300);
-        });
-
-        document.getElementById('btn-tech').addEventListener('click', function() {
+        };
+        document.getElementById('btn-tech').onclick = () => {
             tech.classList.add('active'); islam.classList.remove('active');
             neonWrap.classList.add('is-flipped');
-            setTimeout(() => { frontFace.style.display = 'none'; backFace.style.display = 'flex'; }, 300);
-        });
+        };
 
-        function goBack() { 
-            frontFace.style.display = 'flex'; backFace.style.display = 'none';
-            neonWrap.classList.remove('is-flipped'); 
+        // Instant Return function
+        function instantReturn() {
+            neonWrap.classList.remove('is-flipped');
         }
 
+        document.getElementById('return-btn').onclick = instantReturn;
+        document.getElementById('return-btn-tech').onclick = instantReturn;
+
+        // Popup logic
+        const modal = document.getElementById('detailModal'), overlay = document.getElementById('overlay');
+        function showPopup(t, b) { document.getElementById('mTitle').textContent = t.toUpperCase(); document.getElementById('mBody').textContent = b; modal.classList.add('active'); overlay.classList.add('active'); neonWrap.classList.add('blur-active'); }
+        function closeAll() { modal.classList.remove('active'); overlay.classList.remove('active'); neonWrap.classList.remove('blur-active'); }
+        document.getElementById('closeM').onclick = closeAll; overlay.onclick = closeAll;
+
+        // Snow
         const canvas = document.getElementById('snow-canvas-back'), ctx = canvas.getContext('2d');
-        let w, h, particles = [];
-        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
-        for(let i=0; i<50; i++) particles.push({ x: Math.random() * w, y: Math.random() * h, size: Math.random() * 1.5, speed: Math.random() * 0.4 + 0.2 });
-        function draw() {
-            ctx.clearRect(0,0,w,h); ctx.fillStyle = 'rgba(255,255,255,0.15)';
-            particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); p.y += p.speed; if(p.y > h) p.y = -10; });
-            requestAnimationFrame(draw);
-        }
-        draw();
+        let sw, sh, pArr = []; function resS() { sw = canvas.width = window.innerWidth; sh = canvas.height = window.innerHeight; } window.onresize = resS; resS(); for(let i=0; i<50; i++) pArr.push({x:Math.random()*sw, y:Math.random()*sh, s:Math.random()*1.5, sp:Math.random()*0.4+0.2}); function drawS() { ctx.clearRect(0,0,sw,sh); ctx.fillStyle = 'rgba(255,255,255,0.15)'; pArr.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); p.y+=p.sp; if(p.y>sh) p.y=-10; }); requestAnimationFrame(drawS); }
+        drawS();
     </script>
 </body>
 </html>
