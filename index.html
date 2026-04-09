@@ -28,14 +28,21 @@
             perspective: 2000px;
         }
 
+        /* --- Cyber Matrix Background --- */
+        #cyber-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -4; opacity: 0.15;
+        }
+
         .neon-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; filter: blur(120px); }
-        .blob { position: absolute; border-radius: 50%; opacity: 0.35; animation: drift 15s infinite alternate ease-in-out; } 
+        .blob { position: absolute; border-radius: 50%; opacity: 0.3; animation: drift 15s infinite alternate ease-in-out; } 
         .blob1 { width: 60vw; height: 60vw; background: var(--main-blue); top: -10%; left: -10%; }
         .blob2 { width: 70vw; height: 70vw; background: var(--main-green); bottom: -15%; right: -10%; }
         @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px, 60px); } }
 
-        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.25; }
+        #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -2; opacity: 0.2; }
 
+        /* --- Main Card Wrapper --- */
         .neon-card-wrapper {
             width: 90%; max-width: 380px; height: 570px;
             position: relative; border-radius: 40px; padding: 3px; 
@@ -60,33 +67,41 @@
         }
         @keyframes rotateRGB { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* --- FIX: STABLE FLIP FOR PC --- */
         .card-container {
-            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
-            transition: transform 1.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 100%; height: 100%; position: relative; 
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 37px; background: #08080a; z-index: 2;
         }
         .neon-card-wrapper.is-flipped .card-container { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 37px;
+            backface-visibility: hidden; 
+            -webkit-backface-visibility: hidden; /* For Safari/Chrome PC */
+            border-radius: 37px;
             display: flex; flex-direction: column; padding: 40px 25px; 
             background: #08080a;
             border: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center; overflow: hidden; align-items: center; 
         }
 
-        /* Card Shine - Z-index fixed to stay behind buttons */
         .card-face::after {
             content: ''; position: absolute; top: 0; left: -250%; width: 150%; height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 60%, transparent);
-            animation: shineBeam 5s infinite linear; pointer-events: none; 
-            z-index: 1; 
+            animation: shineBeam 5s infinite linear; pointer-events: none; z-index: 1; 
         }
         @keyframes shineBeam { 0% { left: -250%; } 30% { left: 250%; } 100% { left: 250%; } }
 
-        .card-back { transform: rotateY(180deg); visibility: hidden; text-align: left; align-items: flex-start !important; }
-        .neon-card-wrapper.is-flipped .card-back { visibility: visible; }
+        /* --- Back Face Hidden Fix --- */
+        .card-back { 
+            transform: rotateY(180deg); 
+            display: none; /* Initially Hidden to avoid PC flicker */
+            text-align: left; align-items: flex-start !important; 
+        }
+        .neon-card-wrapper.is-flipped .card-back { display: flex; }
+        .neon-card-wrapper.is-flipped .card-front { display: none; } /* Hide front immediately when flipped */
 
         .title { font-family: 'Orbitron'; font-size: 1.6rem; color: var(--main-blue); text-shadow: 0 0 10px var(--m-blue-alpha); margin-bottom: 5px; }
         .sahirul-name { font-family: 'Orbitron'; font-size: 1.8rem; color: #fff; margin-bottom: 30px; letter-spacing: 4px; }
@@ -95,8 +110,7 @@
             background: rgba(255, 255, 255, 0.06); margin: 12px 0; padding: 18px;
             border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex; align-items: center; cursor: pointer; width: 100%;
-            transition: 0.4s;
-            position: relative; z-index: 10; /* Buttons prioritized */
+            transition: 0.4s; position: relative; z-index: 10;
         }
         .widget-item:hover { background: rgba(0, 255, 136, 0.08); border-color: var(--main-green); transform: translateX(10px); }
         .icon-art { width: 26px; height: 26px; margin-right: 15px; fill: var(--main-green); filter: drop-shadow(0 0 8px var(--main-green)); }
@@ -108,10 +122,8 @@
             margin-top: 15px; background: var(--insta-grad); padding: 18px; border-radius: 25px;
             color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 0.8rem;
             display: inline-block; width: 100%; text-align: center; font-weight: bold;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: 0.4s;
-            box-shadow: 0 5px 15px rgba(220, 39, 67, 0.4);
-            position: relative; z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2); transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(220, 39, 67, 0.4); position: relative; z-index: 10;
         }
         .instagram-link:active, .instagram-link:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 35px rgba(220, 39, 67, 0.8); }
 
@@ -157,8 +169,7 @@
         .close-modal { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 10px 25px; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
         .info-content { display: none; width: 100%; height: 100%; }
-        .info-content.active { display: flex; flex-direction: column; animation: slideIn 0.5s ease forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .info-content.active { display: flex; flex-direction: column; }
         .back-title { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--main-green); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .back-text p { font-size: 0.95rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; white-space: nowrap; }
         .glow-bullet { color: var(--main-green); margin-right: 12px; font-weight: bold; text-shadow: 0 0 10px var(--main-green); }
@@ -170,6 +181,7 @@
 </head>
 <body>
 
+    <canvas id="cyber-canvas"></canvas>
     <div class="neon-bg" id="dynamic-bg"><div class="blob blob1"></div><div class="blob blob2"></div></div>
     <canvas id="snow-canvas-back"></canvas>
 
@@ -225,6 +237,29 @@
     </div>
 
     <script>
+        // --- Matrix Animation ---
+        const cyberCanvas = document.getElementById('cyber-canvas');
+        const cctx = cyberCanvas.getContext('2d');
+        let cw, ch;
+        function resizeMatrix() { cw = cyberCanvas.width = window.innerWidth; ch = cyberCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeMatrix); resizeMatrix();
+        const chars = "0101ABCD";
+        const fontSize = 14;
+        const columns = cw / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        function drawMatrix() {
+            cctx.fillStyle = "rgba(1, 1, 3, 0.1)"; cctx.fillRect(0, 0, cw, ch);
+            cctx.fillStyle = "#00ff88"; cctx.font = fontSize + "px Orbitron";
+            for(let i=0; i<drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                cctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if(drops[i] * fontSize > ch && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Typing Effect
         const phrases = ["“Also Work for the Eternal, not just for a Single Drop of the Ocean\"", "Innovating with Passion...", "Code is Poetry in Motion.", "Stay Focused, Stay Humble."];
         let phraseIdx = 0, charIdx = 0, isDeleting = false;
         function type() {
@@ -239,6 +274,7 @@
         }
         window.onload = type;
 
+        // Click Particles
         document.addEventListener('click', (e) => {
             if (e.target.closest('.close-modal') || e.target.closest('.blue') || e.target.closest('.widget-item') || e.target.closest('.back-btn')) {
                 for(let i=0; i<8; i++) {
@@ -264,25 +300,23 @@
         function closeAll() { modal.classList.remove('active'); overlay.classList.remove('active'); cardWrap.classList.remove('blur-active'); }
         document.getElementById('closeM').onclick = closeAll; overlay.onclick = closeAll;
 
-        const neonWrap = document.getElementById('neon-wrap'), frontFace = document.getElementById('front-face'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
+        const neonWrap = document.getElementById('neon-wrap'), frontFace = document.getElementById('front-face'), backFace = document.getElementById('back-face'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
         
-        // Fixed Click Listeners
+        // --- FIX: IMMEDIATE HIDE LOGIC FOR PC ---
         document.getElementById('btn-islam').addEventListener('click', function() {
-            islam.classList.add('active'); 
-            tech.classList.remove('active'); 
-            neonWrap.classList.add('is-flipped'); 
-            setTimeout(() => { frontFace.style.visibility = 'hidden'; }, 500);
+            islam.classList.add('active'); tech.classList.remove('active');
+            neonWrap.classList.add('is-flipped');
+            setTimeout(() => { frontFace.style.display = 'none'; backFace.style.display = 'flex'; }, 300);
         });
 
         document.getElementById('btn-tech').addEventListener('click', function() {
-            tech.classList.add('active'); 
-            islam.classList.remove('active'); 
-            neonWrap.classList.add('is-flipped'); 
-            setTimeout(() => { frontFace.style.visibility = 'hidden'; }, 500);
+            tech.classList.add('active'); islam.classList.remove('active');
+            neonWrap.classList.add('is-flipped');
+            setTimeout(() => { frontFace.style.display = 'none'; backFace.style.display = 'flex'; }, 300);
         });
 
         function goBack() { 
-            frontFace.style.visibility = 'visible'; 
+            frontFace.style.display = 'flex'; backFace.style.display = 'none';
             neonWrap.classList.remove('is-flipped'); 
         }
 
