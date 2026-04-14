@@ -28,7 +28,7 @@
             perspective: 2000px;
         }
 
-        /* --- Backgrounds --- */
+        /* --- Full Backgrounds --- */
         #cyber-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5; opacity: 0.3; pointer-events: none; }
         .neon-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -4; filter: blur(120px); pointer-events: none; }
         .blob { position: absolute; border-radius: 50%; opacity: 0.35; animation: drift 15s infinite alternate ease-in-out; } 
@@ -37,7 +37,7 @@
         @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px, 60px); } }
         #snow-canvas-back { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -3; opacity: 0.2; }
 
-        /* --- Card Wrapper --- */
+        /* --- Main Card Wrapper --- */
         .neon-card-wrapper {
             width: 90%; max-width: 380px; height: 570px;
             position: relative; border-radius: 40px; padding: 3px; 
@@ -77,13 +77,15 @@
             transition: opacity 0.3s;
         }
 
+        /* --- Shining Beam Effect --- */
         .card-face::after {
             content: ''; position: absolute; top: 0; left: -250%; width: 150%; height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 60%, transparent);
             animation: shineBeam 5s infinite linear; pointer-events: none; z-index: 10;
         }
+        @keyframes shineBeam { 0% { left: -250%; } 30% { left: 250%; } 100% { left: 250%; } }
 
-        /* --- Visibility Logic to stop ghost clicks --- */
+        /* --- Card Visibility Logic --- */
         .card-front { z-index: 2; opacity: 1; pointer-events: auto; }
         .card-back { transform: rotateY(180deg); z-index: 1; opacity: 0; pointer-events: none; text-align: left; align-items: flex-start !important; }
 
@@ -114,7 +116,7 @@
         }
         .instagram-link:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 35px rgba(220, 39, 67, 0.8); }
 
-        /* --- Popup --- */
+        /* --- Ultra Glass Popup --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.2); z-index: 999;
@@ -133,6 +135,14 @@
         }
         .modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1) rotateX(0deg); }
 
+        /* Popup Shining Beam */
+        .modal::after {
+            content: ''; position: absolute; top: 0; left: -250%; width: 40%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3) 50%, transparent);
+            animation: popupShine 4s infinite linear; pointer-events: none; z-index: 1001;
+        }
+        @keyframes popupShine { 0% { left: -250%; } 35% { left: 250%; } 100% { left: 250%; } }
+
         .modal-inner-content {
             background: rgba(255, 255, 255, 0.02);
             padding: 40px 25px; border-radius: 35px; 
@@ -145,15 +155,18 @@
         .modal-body { font-size: 1rem; color: #fff; line-height: 1.6; font-weight: 700; font-style: italic; text-align: center; margin-bottom: 25px; text-shadow: 0 2px 8px rgba(0,0,0,1); }
         .close-modal { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 10px 25px; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
-        /* --- Back Content --- */
+        /* --- Back Content with Bullet Glow --- */
         .info-content { display: none; width: 100%; height: 100%; flex-direction: column; }
         .info-content.active { display: flex; animation: slideIn 0.5s ease forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
         .back-title { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--main-green); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .back-text p { font-size: 0.95rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; white-space: nowrap; }
         .glow-bullet { color: var(--main-green); margin-right: 12px; font-weight: bold; text-shadow: 0 0 10px var(--main-green); }
         .blue { color: var(--main-blue); font-weight: bold; margin: 0 5px; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(0, 210, 255, 0.4); }
-        .back-btn { margin-top: auto; background: var(--main-green); color: #000; border: none; padding: 16px; border-radius: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; width: 100%; }
+        .back-btn { margin-top: auto; background: var(--main-green); color: #000; border: none; padding: 16px; border-radius: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; width: 100%; position: relative; z-index: 30; }
 
+        /* --- Premium Click Particles --- */
         .click-p { position: fixed; pointer-events: none; border-radius: 50%; z-index: 99999; }
     </style>
 </head>
@@ -193,12 +206,12 @@
                 <div id="islam-info" class="info-content">
                     <h3 class="back-title">Islamic Identity</h3>
                     <div class="back-text">
-                        <p><span class="glow-bullet">▹</span> Servant of <span class="blue" onclick="showPopup('Allah (SWT)', 'The One and Only God, the Creator.')">Allah (SWT)</span>.</p>
+                        <p><span class="glow-bullet">▹</span> Servant of <span class="blue" onclick="showPopup('Allah (SWT)', 'The One and Only Creator.')">Allah (SWT)</span>.</p>
                         <p><span class="glow-bullet">▹</span> Following the <span class="blue" onclick="showPopup('Sunnah', 'Practices of Prophet Muhammad (PBUH).')">Sunnah</span>.</p>
                         <p><span class="glow-bullet">▹</span> Seeking <span class="blue" onclick="showPopup('Success', 'True victory: Pleasure of Allah and Jannah.')">Eternal Success</span>.</p>
                         <p><span class="glow-bullet">▹</span> Committed to <span class="blue" onclick="showPopup('Haqq', 'Standing firm for the Truth.')">Haqq</span>.</p>
                     </div>
-                    <button class="back-btn" id="return-btn">RETURN TO PROFILE</button>
+                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
                 </div>
                 <div id="tech-info" class="info-content">
                     <h3 class="back-title">Tech Expertise</h3>
@@ -208,14 +221,14 @@
                         <p><span class="glow-bullet">▹</span> Specialist in <span class="blue" onclick="showPopup('Hardware', 'Diagnostic of micro-soldering and motherboards.')">Micro-Hardware</span>.</p>
                         <p><span class="glow-bullet">▹</span> <span class="blue" onclick="showPopup('Logic', 'Logic architecture to solve PCB faults.')">Circuit Logic</span> Architect.</p>
                     </div>
-                    <button class="back-btn" id="return-btn-tech">RETURN TO PROFILE</button>
+                    <button class="back-btn" onclick="goBack()">RETURN TO PROFILE</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Matrix & Snow (Optimized)
+        // Matrix & Snow
         const cyberCanvas = document.getElementById('cyber-canvas'), cctx = cyberCanvas.getContext('2d');
         let cw, ch; function resM() { cw = cyberCanvas.width = window.innerWidth; ch = cyberCanvas.height = window.innerHeight; }
         window.onresize = resM; resM();
@@ -228,34 +241,32 @@
         function type() { const cur = phrases[pIdx]; const el = document.getElementById('typing-text'); el.textContent = cur.substring(0, cIdx + (isDel ? -1 : 1)); cIdx += isDel ? -1 : 1; let speed = isDel ? 40 : 80; if(!isDel && cIdx === cur.length) { isDel = true; speed = 2500; } else if(isDel && cIdx === 0) { isDel = false; pIdx = (pIdx+1)%phrases.length; speed = 500; } setTimeout(type, speed); }
         window.onload = type;
 
-        // Click Particles
-        document.addEventListener('mousedown', (e) => { for(let i=0; i<15; i++) { const p = document.createElement('div'); p.className = 'click-p'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; p.style.width = Math.random() * 5 + 2 + 'px'; p.style.height = p.style.width; const color = Math.random() > 0.5 ? 'var(--main-blue)' : 'var(--main-green)'; p.style.background = color; p.style.boxShadow = `0 0 12px ${color}`; document.body.appendChild(p); const dx = (Math.random() - 0.5) * 150, dy = (Math.random() - 0.5) * 150; p.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }], { duration: Math.random() * 500 + 500, easing: 'cubic-bezier(0, .9, .57, 1)' }).onfinish = () => p.remove(); } });
+        // --- Click Particles (Premium Style) ---
+        document.addEventListener('mousedown', (e) => {
+            for(let i=0; i<15; i++) {
+                const p = document.createElement('div');
+                p.className = 'click-p';
+                p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+                p.style.width = Math.random() * 5 + 2 + 'px'; p.style.height = p.style.width;
+                const color = Math.random() > 0.5 ? 'var(--main-blue)' : 'var(--main-green)';
+                p.style.background = color; p.style.boxShadow = `0 0 12px ${color}`;
+                document.body.appendChild(p);
+                const dx = (Math.random() - 0.5) * 150, dy = (Math.random() - 0.5) * 150;
+                p.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }], { duration: 800, easing: 'cubic-bezier(0, .9, .57, 1)' }).onfinish = () => p.remove();
+            }
+        });
 
-        // Navigation (Physical Layer Logic)
-        const neonWrap = document.getElementById('neon-wrap'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
-        
-        document.getElementById('btn-islam').onclick = () => {
-            islam.classList.add('active'); tech.classList.remove('active');
-            neonWrap.classList.add('is-flipped');
-        };
-        document.getElementById('btn-tech').onclick = () => {
-            tech.classList.add('active'); islam.classList.remove('active');
-            neonWrap.classList.add('is-flipped');
-        };
-
-        // Instant Return function
-        function instantReturn() {
-            neonWrap.classList.remove('is-flipped');
-        }
-
-        document.getElementById('return-btn').onclick = instantReturn;
-        document.getElementById('return-btn-tech').onclick = instantReturn;
-
-        // Popup logic
-        const modal = document.getElementById('detailModal'), overlay = document.getElementById('overlay');
-        function showPopup(t, b) { document.getElementById('mTitle').textContent = t.toUpperCase(); document.getElementById('mBody').textContent = b; modal.classList.add('active'); overlay.classList.add('active'); neonWrap.classList.add('blur-active'); }
-        function closeAll() { modal.classList.remove('active'); overlay.classList.remove('active'); neonWrap.classList.remove('blur-active'); }
+        // Popup Logic
+        const modal = document.getElementById('detailModal'), overlay = document.getElementById('overlay'), cardWrap = document.getElementById('neon-wrap');
+        function showPopup(t, b) { document.getElementById('mTitle').textContent = t.toUpperCase(); document.getElementById('mBody').textContent = b; modal.classList.add('active'); overlay.classList.add('active'); cardWrap.classList.add('blur-active'); }
+        function closeAll() { modal.classList.remove('active'); overlay.classList.remove('active'); cardWrap.classList.remove('blur-active'); }
         document.getElementById('closeM').onclick = closeAll; overlay.onclick = closeAll;
+
+        // Flip Logic
+        const neonWrap = document.getElementById('neon-wrap'), front = document.getElementById('front-face'), islam = document.getElementById('islam-info'), tech = document.getElementById('tech-info');
+        document.getElementById('btn-islam').onclick = () => { islam.classList.add('active'); tech.classList.remove('active'); neonWrap.classList.add('is-flipped'); setTimeout(() => { front.style.visibility = 'hidden'; }, 400); };
+        document.getElementById('btn-tech').onclick = () => { tech.classList.add('active'); islam.classList.remove('active'); neonWrap.classList.add('is-flipped'); setTimeout(() => { front.style.visibility = 'hidden'; }, 400); };
+        function goBack() { front.style.visibility = 'visible'; neonWrap.classList.remove('is-flipped'); }
 
         // Snow
         const canvas = document.getElementById('snow-canvas-back'), ctx = canvas.getContext('2d');
