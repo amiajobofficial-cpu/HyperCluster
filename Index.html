@@ -1,0 +1,2679 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Adam's Profile</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Montserrat:ital,wght@1,700&display=swap"
+rel="stylesheet">
+
+<style>
+
+:root{
+    --bg-deep:#010103;
+    --main-blue:#00d2ff;
+    --main-green:#00ff88;
+    --m-blue-alpha:rgba(0,210,255,.4);
+
+    --insta-grad:
+    linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background-color:var(--bg-deep);
+    color:#fff;
+
+    height:100vh;
+    width:100vw;
+
+    overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-family:'Montserrat',sans-serif;
+
+    perspective:2000px;
+}
+
+
+/* =========================
+   CYBER BACKGROUND
+========================= */
+
+#cyber-canvas{
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    z-index:-5;
+
+    opacity:.3;
+
+    pointer-events:none;
+}
+
+
+.neon-bg{
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    z-index:-4;
+
+    filter:blur(120px);
+
+    pointer-events:none;
+}
+
+
+.blob{
+    position:absolute;
+
+    border-radius:50%;
+
+    opacity:.35;
+
+    animation:
+    drift
+    15s
+    infinite
+    alternate
+    ease-in-out;
+}
+
+
+.blob1{
+    width:60vw;
+    height:60vw;
+
+    background:var(--main-blue);
+
+    top:-10%;
+    left:-10%;
+}
+
+
+.blob2{
+    width:70vw;
+    height:70vw;
+
+    background:var(--main-green);
+
+    bottom:-15%;
+    right:-10%;
+}
+
+
+@keyframes drift{
+
+    from{
+        transform:
+        translate(0,0);
+    }
+
+    to{
+        transform:
+        translate(40px,60px);
+    }
+
+}
+
+
+/* =========================
+   MAIN NEON CARD
+========================= */
+
+.neon-card-wrapper{
+
+    width:90%;
+    max-width:380px;
+
+    height:570px;
+
+    position:relative;
+
+    border-radius:40px;
+
+    padding:3px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:
+
+    0 20px 50px
+    rgba(0,0,0,.8),
+
+    0 0 40px
+    rgba(0,210,255,.12);
+
+    animation:
+    floatingCard
+    6s
+    infinite
+    ease-in-out;
+
+    transition:
+    filter .5s ease,
+    transform .5s ease;
+
+    z-index:5;
+}
+
+
+.neon-card-wrapper.blur-active{
+
+    filter:
+    blur(12px);
+
+    transform:
+    scale(.95);
+
+}
+
+
+@keyframes floatingCard{
+
+    0%,
+    100%{
+
+        transform:
+        translateY(0)
+        rotate(0deg);
+
+    }
+
+    50%{
+
+        transform:
+        translateY(-15px)
+        rotate(.5deg);
+
+    }
+
+}
+
+
+.neon-card-wrapper::before{
+
+    content:'';
+
+    position:absolute;
+
+    width:180%;
+    height:180%;
+
+    background:
+
+    conic-gradient(
+        from 0deg,
+        transparent,
+        var(--main-blue),
+        transparent,
+        var(--main-green),
+        transparent
+    );
+
+    animation:
+    rotateRGB
+    4s
+    linear
+    infinite;
+
+}
+
+
+@keyframes rotateRGB{
+
+    from{
+        transform:
+        rotate(0deg);
+    }
+
+    to{
+        transform:
+        rotate(360deg);
+    }
+
+}
+
+
+/* =========================
+   CARD FLIP SYSTEM
+========================= */
+
+.card-container{
+
+    width:100%;
+    height:100%;
+
+    position:relative;
+
+    transform-style:
+    preserve-3d;
+
+    transition:
+
+    transform
+    .8s
+    cubic-bezier(.34,1.56,.64,1);
+
+    border-radius:37px;
+
+    background:#08080a;
+
+    z-index:2;
+}
+
+
+.neon-card-wrapper.is-flipped
+.card-container{
+
+    transform:
+    rotateY(180deg);
+
+}
+
+
+.card-face{
+
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+
+    border-radius:37px;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:35px 23px;
+
+    background:#08080a;
+
+    border:
+    1px solid
+    rgba(255,255,255,.05);
+
+    text-align:center;
+
+    overflow:hidden;
+
+    align-items:center;
+}
+
+
+.card-face::after{
+
+    content:'';
+
+    position:absolute;
+
+    top:0;
+    left:-250%;
+
+    width:150%;
+    height:100%;
+
+    background:
+
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,.2) 50%,
+        rgba(255,255,255,0) 60%,
+        transparent
+    );
+
+    animation:
+    shineBeam
+    5s
+    infinite
+    linear;
+
+    pointer-events:none;
+
+    z-index:10;
+}
+
+
+@keyframes shineBeam{
+
+    0%{
+        left:-250%;
+    }
+
+    30%{
+        left:250%;
+    }
+
+    100%{
+        left:250%;
+    }
+
+}
+
+
+.card-front{
+    z-index:2;
+}
+
+
+.card-back{
+
+    transform:
+    rotateY(180deg);
+
+    z-index:1;
+
+    text-align:left;
+
+    align-items:flex-start!important;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.title{
+
+    font-family:'Orbitron';
+
+    font-size:1.55rem;
+
+    color:
+    var(--main-blue);
+
+    text-shadow:
+
+    0 0 10px
+    var(--m-blue-alpha),
+
+    0 0 25px
+    rgba(0,210,255,.18);
+
+    margin-top:10px;
+
+    margin-bottom:28px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================
+   WIDGETS
+========================= */
+
+.widget-item{
+
+    background:
+    rgba(255,255,255,.06);
+
+    margin:10px 0;
+
+    padding:17px;
+
+    border-radius:20px;
+
+    border:
+    1px solid
+    rgba(255,255,255,.05);
+
+    display:flex;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    width:100%;
+
+    transition:
+    .4s;
+
+    position:relative;
+
+    z-index:20;
+}
+
+
+.widget-item:hover{
+
+    background:
+    rgba(0,255,136,.08);
+
+    border-color:
+    var(--main-green);
+
+    transform:
+    translateX(10px);
+
+    box-shadow:
+    0 0 25px
+    rgba(0,255,136,.12);
+}
+
+
+.icon-art{
+
+    width:26px;
+    height:26px;
+
+    margin-right:15px;
+
+    fill:
+    var(--main-green);
+
+    filter:
+    drop-shadow(
+        0 0 8px
+        var(--main-green)
+    );
+}
+
+
+/* =========================
+   TYPING
+========================= */
+
+#typing{
+
+    font-style:italic;
+
+    font-size:.82rem;
+
+    margin:20px 0;
+
+    min-height:48px;
+
+    color:#ccc;
+
+    text-align:center;
+
+    line-height:1.5;
+}
+
+
+.cursor{
+
+    display:inline-block;
+
+    width:6px;
+    height:1rem;
+
+    background-color:
+    var(--main-green);
+
+    margin-left:5px;
+
+    animation:
+    blink
+    .8s
+    infinite;
+}
+
+
+@keyframes blink{
+
+    50%{
+        opacity:0;
+    }
+
+}
+
+
+/* =========================
+   INSTAGRAM
+========================= */
+
+.instagram-link{
+
+    margin-top:auto;
+
+    background:
+    var(--insta-grad);
+
+    padding:17px;
+
+    border-radius:25px;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-family:'Orbitron';
+
+    font-size:.72rem;
+
+    display:inline-block;
+
+    width:100%;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    box-shadow:
+    0 5px 15px
+    rgba(220,39,67,.3);
+
+    transition:.4s;
+
+    position:relative;
+
+    z-index:20;
+}
+
+
+.instagram-link:hover{
+
+    transform:
+    scale(1.04)
+    translateY(-4px);
+
+    box-shadow:
+    0 12px 35px
+    rgba(220,39,67,.8);
+}
+
+
+/* =========================
+   BACK CONTENT
+========================= */
+
+.info-content{
+
+    display:none;
+
+    width:100%;
+    height:100%;
+
+    flex-direction:column;
+
+    overflow-y:auto;
+
+    padding-right:4px;
+}
+
+
+.info-content.active{
+
+    display:flex;
+
+    animation:
+    slideIn
+    .5s
+    ease
+    forwards;
+}
+
+
+@keyframes slideIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(15px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+
+    }
+
+}
+
+
+.back-title{
+
+    font-family:'Orbitron';
+
+    font-size:1.2rem;
+
+    color:
+    var(--main-green);
+
+    margin-bottom:20px;
+
+    border-bottom:
+    1px solid
+    rgba(255,255,255,.1);
+
+    padding-bottom:10px;
+}
+
+
+.back-text p{
+
+    font-size:.83rem;
+
+    margin-bottom:16px;
+
+    color:#fff;
+
+    line-height:1.55;
+
+    display:flex;
+
+    align-items:flex-start;
+}
+
+
+.glow-bullet{
+
+    color:
+    var(--main-green);
+
+    margin-right:10px;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 10px
+    var(--main-green);
+}
+
+
+/* =========================
+   CLICKABLE HYPERLINK WORDS
+========================= */
+
+.blue{
+
+    color:
+    var(--main-blue);
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    text-decoration:underline;
+
+    text-decoration-color:
+    rgba(0,210,255,.4);
+
+    text-underline-offset:3px;
+
+    transition:.25s;
+}
+
+
+.blue:hover{
+
+    color:#fff;
+
+    text-shadow:
+    0 0 12px
+    var(--main-blue);
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-btn{
+
+    margin-top:auto;
+
+    background:
+    var(--main-green);
+
+    color:#000;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    font-family:'Orbitron';
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    width:100%;
+
+    position:relative;
+
+    z-index:30;
+
+    transition:.3s;
+}
+
+
+.back-btn:hover{
+
+    transform:
+    scale(1.02);
+
+    box-shadow:
+    0 0 30px
+    rgba(0,255,136,.35);
+}
+
+
+/* =========================
+   GLASS MODAL
+========================= */
+
+.modal-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    background:
+    rgba(0,0,0,.18);
+
+    backdrop-filter:
+    blur(8px);
+
+    -webkit-backdrop-filter:
+    blur(8px);
+
+    z-index:999;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:
+    .5s ease;
+}
+
+
+.modal-overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+}
+
+
+.modal{
+
+    position:fixed;
+
+    top:50%;
+    left:50%;
+
+    width:85%;
+    max-width:340px;
+
+    z-index:1000;
+
+    border-radius:35px;
+
+    overflow:hidden;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:
+
+    translate(-50%,-45%)
+    scale(.8)
+    rotateX(-20deg);
+
+    transition:
+
+    all
+    .6s
+    cubic-bezier(.23,1,.32,1);
+
+    border:
+    1px solid
+    rgba(255,255,255,.2);
+
+    box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.6);
+}
+
+
+.modal.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:
+
+    translate(-50%,-50%)
+    scale(1)
+    rotateX(0deg);
+}
+
+
+/* LIQUID GLASS */
+
+.modal-inner-content{
+
+    position:relative;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,.16),
+        rgba(255,255,255,.035)
+    );
+
+    padding:35px 24px;
+
+    border-radius:35px;
+
+    backdrop-filter:
+
+    blur(35px)
+    saturate(180%)
+    brightness(1.15);
+
+    -webkit-backdrop-filter:
+
+    blur(35px)
+    saturate(180%)
+    brightness(1.15);
+
+    border:
+
+    1px solid
+    rgba(255,255,255,.25);
+
+    box-shadow:
+
+    0 25px 70px
+    rgba(0,0,0,.45),
+
+    inset 0 1px 1px
+    rgba(255,255,255,.35),
+
+    inset 0 -20px 50px
+    rgba(0,0,0,.12),
+
+    0 0 60px
+    rgba(0,210,255,.16);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    overflow:hidden;
+}
+
+
+.modal-inner-content::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-100%;
+    left:-50%;
+
+    width:200%;
+    height:200%;
+
+    background:
+
+    radial-gradient(
+        circle,
+        rgba(255,255,255,.22),
+        transparent 45%
+    );
+
+    animation:
+
+    modalLiquidMove
+    8s
+    linear
+    infinite;
+
+    pointer-events:none;
+}
+
+
+@keyframes modalLiquidMove{
+
+    0%{
+
+        transform:
+        translate(-20%,-20%)
+        rotate(0deg);
+
+    }
+
+    50%{
+
+        transform:
+        translate(20%,15%)
+        rotate(180deg);
+
+    }
+
+    100%{
+
+        transform:
+        translate(-20%,-20%)
+        rotate(360deg);
+
+    }
+
+}
+
+
+.modal-title,
+.modal-body,
+.close-modal{
+
+    position:relative;
+
+    z-index:2;
+}
+
+
+.modal-title{
+
+    font-family:'Orbitron';
+
+    color:
+    var(--main-blue);
+
+    margin-bottom:15px;
+
+    font-size:1.05rem;
+
+    text-shadow:
+    0 0 10px
+    var(--m-blue-alpha);
+}
+
+
+.modal-body{
+
+    font-size:.9rem;
+
+    color:#fff;
+
+    line-height:1.7;
+
+    font-weight:700;
+
+    font-style:italic;
+
+    margin-bottom:25px;
+}
+
+
+.close-modal{
+
+    background:
+    rgba(255,255,255,.1);
+
+    backdrop-filter:
+    blur(10px);
+
+    border:
+    1px solid
+    rgba(255,255,255,.3);
+
+    color:#fff;
+
+    padding:10px 25px;
+
+    border-radius:12px;
+
+    font-family:'Orbitron';
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* PARTICLES */
+
+.click-p{
+
+    position:fixed;
+
+    pointer-events:none;
+
+    border-radius:50%;
+
+    z-index:99999;
+}
+
+
+/* MOBILE */
+
+@media(max-width:420px){
+
+    .neon-card-wrapper{
+        height:560px;
+    }
+
+    .card-face{
+        padding:30px 20px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<canvas id="cyber-canvas"></canvas>
+
+
+<div class="neon-bg">
+
+    <div class="blob blob1"></div>
+
+    <div class="blob blob2"></div>
+
+</div>
+
+
+<!-- MODAL OVERLAY -->
+
+<div
+class="modal-overlay"
+id="overlay">
+</div>
+
+
+<!-- MODAL -->
+
+<div
+class="modal"
+id="detailModal">
+
+    <div class="modal-inner-content">
+
+        <h3
+        class="modal-title"
+        id="mTitle">
+
+        INFORMATION
+
+        </h3>
+
+
+        <p
+        class="modal-body"
+        id="mBody">
+
+        Details...
+
+        </p>
+
+
+        <button
+        class="close-modal"
+        id="closeM">
+
+        CLOSE
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN CARD -->
+
+<div
+class="neon-card-wrapper"
+id="neon-wrap">
+
+
+<div
+class="card-container"
+id="card-inner">
+
+
+<!-- ================= FRONT ================= -->
+
+<div
+class="card-face card-front">
+
+
+<h1 class="title">
+
+Adam's Profile
+
+</h1>
+
+
+<!-- FAITH -->
+
+<div
+class="widget-item"
+id="btn-faith">
+
+<svg
+class="icon-art"
+viewBox="0 0 24 24">
+
+<path d="M12.5,2C11.39,2 10.31,2.15 9.28,2.44C12.61,3.43 15,6.47 15,10C15,13.53 12.61,16.57 9.28,17.56C10.31,17.85 11.39,18 12.5,18C16.92,18 20.5,14.42 20.5,10C20.5,5.58 16.92,2 12.5,2Z"/>
+
+</svg>
+
+<span>
+Faith
+</span>
+
+</div>
+
+
+<!-- PROFESSION -->
+
+<div
+class="widget-item"
+id="btn-profession">
+
+<svg
+class="icon-art"
+viewBox="0 0 24 24">
+
+<path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z"/>
+
+</svg>
+
+<span>
+Profession & Skills
+</span>
+
+</div>
+
+
+<div id="typing">
+
+<span id="typing-text"></span>
+
+<span class="cursor"></span>
+
+</div>
+
+
+<!-- INSTAGRAM -->
+
+<a
+href="https://www.instagram.com/imnotthosemen/"
+target="_blank"
+rel="noopener noreferrer"
+class="instagram-link">
+
+@imnotthosemen
+
+</a>
+
+
+</div>
+
+
+
+<!-- ================= BACK ================= -->
+
+<div
+class="card-face card-back">
+
+
+<!-- FAITH -->
+
+<div
+id="faith-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+Faith
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPillars()">
+
+5 Pillars of Islam
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showArticles()">
+
+6 Articles of Faith
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+Faith includes belief in Allah,
+Angels, Revealed Books,
+Prophets, the Last Day
+and Qadar.
+
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="goBack()">
+
+RETURN TO PROFILE
+
+</button>
+
+
+</div>
+
+
+
+<!-- 5 PILLARS -->
+
+<div
+id="pillars-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+5 Pillars of Islam
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Shahadah',
+'The Shahadah is the declaration of faith: bearing witness that there is no deity worthy of worship except Allah, and that Muhammad ﷺ is His Messenger.'
+)">
+
+Shahadah
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Salah',
+'Salah refers to the prescribed daily prayers. Muslims perform five daily prayers as an important act of worship and connection with Allah.'
+)">
+
+Salah
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Zakat',
+'Zakat is an obligatory form of charitable giving for eligible Muslims. It emphasizes generosity, social responsibility and care for those in need.'
+)">
+
+Zakat
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Sawm',
+'Sawm refers to fasting during the month of Ramadan, from dawn until sunset, for those who are required and able to observe it.'
+)">
+
+Sawm
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Hajj',
+'Hajj is the pilgrimage to Makkah required once in a lifetime for Muslims who are physically and financially able to undertake it.'
+)">
+
+Hajj
+
+</span>
+
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="showFaith()">
+
+BACK TO FAITH
+
+</button>
+
+
+</div>
+
+
+
+<!-- 6 ARTICLES -->
+
+<div
+id="articles-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+6 Articles of Faith
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Belief in Allah',
+'Belief in Allah is the foundation of Islamic faith.'
+)">
+
+Believe in Allah
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Angels',
+'Belief in the angels is one of the six articles of faith.'
+)">
+
+Believe in Angels
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showBooks()">
+
+Believe in Revealed Books
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showProphets()">
+
+Believe in Prophets
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Last Day',
+'Belief in the Last Day is one of the six articles of faith.'
+)">
+
+Believe in the Last Day
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Qadar',
+'Belief in Qadar includes belief in the divine decree.'
+)">
+
+Believe in Qadar
+
+</span>
+
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="showFaith()">
+
+BACK TO FAITH
+
+</button>
+
+
+</div>
+
+
+
+<!-- PROPHETS -->
+
+<div
+id="prophets-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+Prophets
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Adam',
+'Adam is recognized in Islam as the first human and a prophet.'
+)">
+
+Adam
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Noah',
+'Noah is remembered for perseverance and calling his people toward faith.'
+)">
+
+Noah
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Abraham',
+'Abraham, known as Ibrahim, is remembered for devotion and steadfast faith.'
+)">
+
+Abraham
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Moses',
+'Moses, known as Musa, is one of the major prophets in Islamic tradition.'
+)">
+
+Moses
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Jesus',
+'Jesus, known as Isa, is honored in Islam as a prophet and messenger.'
+)">
+
+Jesus
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Muhammad ﷺ',
+'Muhammad ﷺ is regarded in Islam as the final prophet.'
+)">
+
+Muhammad ﷺ
+
+</span>
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="showArticles()">
+
+BACK
+
+</button>
+
+
+</div>
+
+
+
+<!-- BOOKS -->
+
+<div
+id="books-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+Revealed Books
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Tawrat',
+'The Tawrat is associated in Islamic tradition with Musa.'
+)">
+
+Tawrat
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Zabur',
+'The Zabur is associated with Dawud.'
+)">
+
+Zabur
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Injil',
+'The Injil is associated with Isa.'
+)">
+
+Injil
+
+</span>
+
+</p>
+
+
+<p>
+
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Qur’an',
+'The Qur’an is the final revelation in Islam, sent to Muhammad ﷺ.'
+)">
+
+Qur'an
+
+</span>
+
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="showArticles()">
+
+BACK
+
+</button>
+
+
+</div>
+
+
+
+<!-- PROFESSION -->
+
+<div
+id="profession-info"
+class="info-content">
+
+
+<h3 class="back-title">
+
+Profession & Skills
+
+</h3>
+
+
+<div class="back-text">
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'YouTuber',
+'Creating and publishing video content for an online audience.'
+)">
+
+YouTuber
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Gamer',
+'Gaming, strategy and interactive digital entertainment.'
+)">
+
+Gamer
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Editor',
+'Video editing and creative post-production.'
+)">
+
+Editor
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'IC Expert',
+'Electronic component and chip-level diagnostic work.'
+)">
+
+IC Expert
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Coder',
+'Programming and digital development.'
+)">
+
+Coder
+
+</span>
+</p>
+
+
+<p>
+<span class="glow-bullet">▹</span>
+
+<span
+class="blue"
+onclick="showPopup(
+'Phone Technician',
+'Mobile diagnostics, repair and maintenance.'
+)">
+
+Phone Technician
+
+</span>
+</p>
+
+
+</div>
+
+
+<button
+class="back-btn"
+onclick="goBack()">
+
+RETURN TO PROFILE
+
+</button>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* =========================
+   CYBER BACKGROUND
+========================= */
+
+const cyberCanvas =
+document.getElementById(
+"cyber-canvas"
+);
+
+const cctx =
+cyberCanvas.getContext(
+"2d"
+);
+
+let cw;
+let ch;
+
+
+function resizeMatrix(){
+
+    cw =
+    cyberCanvas.width =
+    window.innerWidth;
+
+    ch =
+    cyberCanvas.height =
+    window.innerHeight;
+
+}
+
+
+resizeMatrix();
+
+
+window.addEventListener(
+"resize",
+resizeMatrix
+);
+
+
+const chars =
+"0101ABCD";
+
+
+const fontSize =
+16;
+
+
+let drops =
+Array(
+Math.floor(
+cw/fontSize
+)
+).fill(1);
+
+
+function drawMatrix(){
+
+    cctx.fillStyle =
+    "rgba(1,1,3,.15)";
+
+
+    cctx.fillRect(
+        0,
+        0,
+        cw,
+        ch
+    );
+
+
+    cctx.fillStyle =
+    "#00ff88";
+
+
+    cctx.font =
+    fontSize +
+    "px Orbitron";
+
+
+    drops.forEach(
+    (y,i)=>{
+
+
+        const text =
+        chars[
+        Math.floor(
+        Math.random()
+        *
+        chars.length
+        )
+        ];
+
+
+        cctx.fillText(
+            text,
+            i*fontSize,
+            y*fontSize
+        );
+
+
+        if(
+
+        y*fontSize>ch
+
+        &&
+
+        Math.random()>.975
+
+        ){
+
+            drops[i]=0;
+
+        }
+
+
+        drops[i]++;
+
+    });
+
+}
+
+
+setInterval(
+drawMatrix,
+50
+);
+
+
+/* =========================
+   TYPING EFFECT
+========================= */
+
+const phrases=[
+
+"Faith • Knowledge • Creativity",
+
+"Exploring Technology...",
+
+"Learning • Creating • Growing",
+
+"Premium Digital Profile"
+
+];
+
+
+let pIndex=0;
+
+let cIndex=0;
+
+let deleting=false;
+
+
+function typeText(){
+
+    const current =
+    phrases[pIndex];
+
+
+    const output =
+    document.getElementById(
+    "typing-text"
+    );
+
+
+    if(!deleting){
+
+        output.textContent =
+        current.substring(
+            0,
+            cIndex+1
+        );
+
+        cIndex++;
+
+    }else{
+
+        output.textContent =
+        current.substring(
+            0,
+            cIndex-1
+        );
+
+        cIndex--;
+
+    }
+
+
+    let speed =
+    deleting
+    ?
+    40
+    :
+    80;
+
+
+    if(
+
+    !deleting
+
+    &&
+
+    cIndex===current.length
+
+    ){
+
+        deleting=true;
+
+        speed=1800;
+
+    }
+
+
+    if(
+
+    deleting
+
+    &&
+
+    cIndex===0
+
+    ){
+
+        deleting=false;
+
+        pIndex=
+
+        (pIndex+1)
+
+        %
+
+        phrases.length;
+
+        speed=400;
+
+    }
+
+
+    setTimeout(
+        typeText,
+        speed
+    );
+
+}
+
+
+typeText();
+
+
+/* =========================
+   MODAL SYSTEM
+========================= */
+
+const modal =
+document.getElementById(
+"detailModal"
+);
+
+
+const overlay =
+document.getElementById(
+"overlay"
+);
+
+
+const cardWrap =
+document.getElementById(
+"neon-wrap"
+);
+
+
+function showPopup(
+title,
+body
+){
+
+    document
+    .getElementById(
+    "mTitle"
+    )
+    .textContent =
+    title.toUpperCase();
+
+
+    document
+    .getElementById(
+    "mBody"
+    )
+    .textContent =
+    body;
+
+
+    modal
+    .classList
+    .add(
+    "active"
+    );
+
+
+    overlay
+    .classList
+    .add(
+    "active"
+    );
+
+
+    cardWrap
+    .classList
+    .add(
+    "blur-active"
+    );
+
+}
+
+
+function closeAll(){
+
+    modal
+    .classList
+    .remove(
+    "active"
+    );
+
+
+    overlay
+    .classList
+    .remove(
+    "active"
+    );
+
+
+    cardWrap
+    .classList
+    .remove(
+    "blur-active"
+    );
+
+}
+
+
+document
+.getElementById(
+"closeM"
+)
+.onclick =
+closeAll;
+
+
+overlay.onclick =
+closeAll;
+
+
+/* =========================
+   CARD SYSTEM
+========================= */
+
+const neonWrap =
+document.getElementById(
+"neon-wrap"
+);
+
+
+const faithInfo =
+document.getElementById(
+"faith-info"
+);
+
+
+const pillarsInfo =
+document.getElementById(
+"pillars-info"
+);
+
+
+const articlesInfo =
+document.getElementById(
+"articles-info"
+);
+
+
+const prophetsInfo =
+document.getElementById(
+"prophets-info"
+);
+
+
+const booksInfo =
+document.getElementById(
+"books-info"
+);
+
+
+const professionInfo =
+document.getElementById(
+"profession-info"
+);
+
+
+const allInfo=[
+
+faithInfo,
+
+pillarsInfo,
+
+articlesInfo,
+
+prophetsInfo,
+
+booksInfo,
+
+professionInfo
+
+];
+
+
+function hideAllInfo(){
+
+    allInfo.forEach(
+
+    item=>{
+
+        item
+        .classList
+        .remove(
+        "active"
+        );
+
+    });
+
+}
+
+
+document
+.getElementById(
+"btn-faith"
+)
+.onclick =
+showFaith;
+
+
+document
+.getElementById(
+"btn-profession"
+)
+.onclick =
+showProfession;
+
+
+function showFaith(){
+
+    hideAllInfo();
+
+
+    faithInfo
+    .classList
+    .add(
+    "active"
+    );
+
+
+    neonWrap
+    .classList
+    .add(
+    "is-flipped"
+    );
+
+}
+
+
+function showProfession(){
+
+    hideAllInfo();
+
+
+    professionInfo
+    .classList
+    .add(
+    "active"
+    );
+
+
+    neonWrap
+    .classList
+    .add(
+    "is-flipped"
+    );
+
+}
+
+
+function showPillars(){
+
+    hideAllInfo();
+
+
+    pillarsInfo
+    .classList
+    .add(
+    "active"
+    );
+
+}
+
+
+function showArticles(){
+
+    hideAllInfo();
+
+
+    articlesInfo
+    .classList
+    .add(
+    "active"
+    );
+
+}
+
+
+function showProphets(){
+
+    hideAllInfo();
+
+
+    prophetsInfo
+    .classList
+    .add(
+    "active"
+    );
+
+}
+
+
+function showBooks(){
+
+    hideAllInfo();
+
+
+    booksInfo
+    .classList
+    .add(
+    "active"
+    );
+
+}
+
+
+function goBack(){
+
+    neonWrap
+    .classList
+    .remove(
+    "is-flipped"
+    );
+
+}
+
+
+/* =========================
+   CLICK PARTICLES
+========================= */
+
+document.addEventListener(
+"mousedown",
+(e)=>{
+
+    for(
+
+    let i=0;
+
+    i<12;
+
+    i++
+
+    ){
+
+
+        const particle =
+        document.createElement(
+        "div"
+        );
+
+
+        particle.className =
+        "click-p";
+
+
+        particle.style.left =
+        e.clientX+
+        "px";
+
+
+        particle.style.top =
+        e.clientY+
+        "px";
+
+
+        const size =
+        Math.random()*5+
+        2;
+
+
+        particle.style.width =
+        size+"px";
+
+
+        particle.style.height =
+        size+"px";
+
+
+        const color =
+
+        Math.random()>.5
+
+        ?
+
+        "#00d2ff"
+
+        :
+
+        "#00ff88";
+
+
+        particle.style.background =
+        color;
+
+
+        particle.style.boxShadow =
+        "0 0 12px "+
+        color;
+
+
+        document.body
+        .appendChild(
+        particle
+        );
+
+
+        const dx =
+        (Math.random()-.5)
+        *
+        120;
+
+
+        const dy =
+        (Math.random()-.5)
+        *
+        120;
+
+
+        particle.animate(
+
+        [
+
+        {
+
+        transform:
+        "translate(0,0) scale(1)",
+
+        opacity:1
+
+        },
+
+        {
+
+        transform:
+        `translate(${dx}px,${dy}px) scale(0)`,
+
+        opacity:0
+
+        }
+
+        ],
+
+        {
+
+        duration:700,
+
+        easing:
+        "cubic-bezier(0,.9,.57,1)"
+
+        }
+
+        ).onfinish=
+        ()=>particle.remove();
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
